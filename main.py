@@ -2,6 +2,9 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 import urllib.parse
 import mimetypes
 import pathlib
+import json
+import socket
+import threading
 
 class HttpHandler(BaseHTTPRequestHandler):
     def do_GET(self):
@@ -45,7 +48,7 @@ class HttpHandler(BaseHTTPRequestHandler):
         self.send_header('Location', '/')
         self.end_headers()
 
-def run(server_class=HTTPServer, handler_class=HttpHandler):
+def run_http(server_class=HTTPServer, handler_class=HttpHandler):
     server_address = ('', 3000)
     http = server_class(server_address, handler_class)
     try:
@@ -54,7 +57,29 @@ def run(server_class=HTTPServer, handler_class=HttpHandler):
         http.server_close()
 
 
+UDP_IP = '127.0.0.1'
+UDP_PORT = 5000
+
+
+def run_server(ip, port):
+    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
+        server = ip, port
+        sock.bind(server)
+        try:
+            while True:
+                data, address = sock.recvform(1024)
+                print(f"Received data: {data.decode()} to server: {server}")
+                data_dict = json.loads(data.decode())
+                with open('storage/data.json', 'a') as file:
+                    json.dump(data_dict, file, indent=2)
+                sock.sendto(data, address)
+                print(f"Sent data: {data.decode()} to: {address}")
+        except KeyboardInterrupt:
+            print(f'Destroy server')
+            raise
+        finally:
+            print('Closing server socket')
 
 if __name__ == '__main__':
-    run()
-
+    socket_server = threading.Thread(target=run_server, args=(UDP_IP, UDP_PORT))
+    http_server = threading.Thread(target=run_http) # ось тут потріббно аргумент передавати??????

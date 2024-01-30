@@ -1,30 +1,52 @@
-import socket
+# import json
+# import socket
 
 
-def main():
-    host = socket.gethostname()
-    port = 5000
+# UDP_IP = '127.0.0.1'
+# UDP_PORT = 5000
 
-    server_socket = socket.socket()
-    server_socket.bind((host, port))
-    server_socket.listen(1)
 
-    conn, addr = server_socket.accept()
+# def run_server(ip, port):
+#     with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
+#         server = ip, port
+#         sock.bind(server)
+#         try:
+#             while True:
+#                 data, address = sock.recvform(1024)
+#                 print(f"Received data: {data.decode()} to server: {server}")
+#                 data_dict = json.loads(data.decode())
+#                 with open('storage/data.json', 'a') as file:
+#                     json.dump(data_dict, file, indent=2)
+#                 sock.sendto(data, address)
+#                 print(f"Sent data: {data.decode()} to: {address}")
+#         except KeyboardInterrupt:
+#             print(f'Destroy server')
+#             raise
+#         finally:
+#             print('Closing server socket')
 
-    print('soccket from', addr)
+# if __name__ == '__main__':
+#      run_server(UDP_IP, UDP_PORT)
 
-    while True:
-        data = conn.recv(1024)
-        print('data',data)
-        if data.decode() == 'pass_me':
-            print(data)
-            conn.send('you passed security check'.encode())
 
-            if not data:
-                break
-        else: break
 
-    conn.close()
 
-if __name__ == '__main__':
-    main()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+respont, address = sock.recvform(1024)
+            print(f"Received data: {respont.decode()} from address: {address}")
