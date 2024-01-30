@@ -67,7 +67,7 @@ def run_server(ip, port):
         sock.bind(server)
         try:
             while True:
-                data, address = sock.recvform(1024)
+                data, address = sock.recvfrom(1024)
                 print(f"Received data: {data.decode()} to server: {server}")
                 data_dict = json.loads(data.decode())
                 with open('storage/data.json', 'a') as file:
@@ -83,3 +83,9 @@ def run_server(ip, port):
 if __name__ == '__main__':
     socket_server = threading.Thread(target=run_server, args=(UDP_IP, UDP_PORT))
     http_server = threading.Thread(target=run_http) # ось тут потріббно аргумент передавати??????
+
+    socket_server.start()
+    http_server.start()
+    socket_server.join()
+    http_server.join()
+    print('Done!')

@@ -30,23 +30,3 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-respont, address = sock.recvform(1024)
-            print(f"Received data: {respont.decode()} from address: {address}")
